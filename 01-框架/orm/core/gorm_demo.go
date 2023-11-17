@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-/**
-https://www.cnblogs.com/kylin5201314/p/15484473.html
-*/
-
 // 定义数据模型
 type UserInfo struct {
 	ID         uint      `gorm:"primary_key" json:"id"`
