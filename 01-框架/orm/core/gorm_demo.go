@@ -1,18 +1,15 @@
-package main
+package core
 
 import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 	"log"
 	"os"
 	"time"
 )
-
-/**
-https://www.cnblogs.com/kylin5201314/p/15484473.html
-*/
 
 // 定义数据模型
 type UserInfo struct {
@@ -24,21 +21,24 @@ type UserInfo struct {
 	UpdateTime time.Time `gorm:"-" json:updateTime`
 }
 
-func main() {
+var newLogger = logger.New(
+	log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+	logger.Config{
+		SlowThreshold: time.Second, // 慢 SQL 阈值
+		LogLevel:      logger.Info, // Log level
+		Colorful:      true,        // 禁用彩色打印
+	},
+)
 
-	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold: time.Second, // 慢 SQL 阈值
-			LogLevel:      logger.Info, // Log level
-			Colorful:      true,        // 禁用彩色打印
-		},
-	)
+func DbTest() {
 
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", DC.MysqlConfig.UserName, DC.MysqlConfig.Pwd, DC.MysqlConfig.Url, DC.MysqlConfig.Database)
+	fmt.Println("dsn: ", dsn)
 	db, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: "root:123456@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local", // 账号密码地址端口
+		DSN: dsn, // 账号密码地址端口
 	}), &gorm.Config{
-		Logger: newLogger,
+		Logger:         newLogger,
+		NamingStrategy: schema.NamingStrategy{SingularTable: true}, // 表名后不加s
 	})
 	if err != nil {
 		panic("failed to connect database")
@@ -64,7 +64,7 @@ func main() {
 	// 创建一条数据
 	bd, err := time.Parse(time.DateTime, "2023-11-16 19:00:35")
 	fmt.Println(bd)
-	db.Create(&UserInfo{Name: "面包", Age: 3, Birthday: bd})
+	db.Create(&UserInfo{Name: "面包123", Age: 3, Birthday: bd})
 
 	// 查询所有数据
 	var userInfos []UserInfo
