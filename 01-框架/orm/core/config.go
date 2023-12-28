@@ -12,11 +12,6 @@ func main() {
 	fmt.Println(cf.Url)
 }
 
-func init() {
-	var c     Config
-	cf = c.
-}
-
 // profile variables
 type Config struct {
 	Username string `yaml:"username"`
