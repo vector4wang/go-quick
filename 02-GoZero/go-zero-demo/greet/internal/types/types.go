@@ -18,3 +18,18 @@ type PostResponse struct {
 	Address string `json:"address"`
 	Number  string `json:"number"`
 }
+
+type AddUserRequest struct {
+	Name     string `json:"name"`     // The username
+	Password string `json:"password"` // The user password
+	Mobile   string `json:"mobile"`   // The mobile phone number
+	Gender   string `json:"gender"`   // gender,male|female|unknown
+	Nickname string `json:"nickname"` // The nickname
+	Type     int64  `json:"type"`     // The user type, 0:normal,1:vip, for test golang keyword
+}
+
+type BaseResponse struct {
+	Code    int         `json:"code"`
+	Message string      `json:"msg"`
+	Data    interface{} `json:"data,optional"`
+}

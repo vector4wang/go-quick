@@ -18,10 +18,28 @@ type PostResponse {
 	Number  string `json:"number"`
 }
 
+type AddUserRequest {
+	Name     string `json:"name"`     // The username
+	Password string `json:"password"` // The user password
+	Mobile   string `json:"mobile"`   // The mobile phone number
+	Gender   string `json:"gender"`   // gender,male|female|unknown
+	Nickname string `json:"nickname"` // The nickname
+	Type     int64  `json:"type"`     // The user type, 0:normal,1:vip, for test golang keyword
+}
+
+type BaseResponse {
+	Code    int         `json:"code"`
+	Message string      `json:"msg"`
+	Data    interface{} `json:"data,optional"`
+}
+
 service greet-api {
 	@handler GreetHandler
-	get /from/:name(Request) returns (Response)
+	get /from/:name (Request) returns (Response)
 
 	@handler GreetPostHandler
 	post /info (PostRequest) returns (PostResponse)
+
+	@handler GreetAddUser
+	post /user/add (AddUserRequest) returns (BaseResponse)
 }

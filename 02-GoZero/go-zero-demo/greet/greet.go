@@ -10,7 +10,7 @@ import (
 	"go-zero-demo/greet/internal/svc"
 )
 
-var configFile = "/Users/wangxc/Code/Github/go-quick/02-GoZero/go-zero-demo/greet/etc/greet-api.yaml"
+var configFile = "greet/etc/greet-api.yaml"
 
 //var configFile = flag.String("f", "./etc/greet-api.yaml", "the config file")
 
@@ -21,6 +21,8 @@ func main() {
 	conf.MustLoad(configFile, &c)
 	c.Log.Encoding = "plain"
 	c.Log.TimeFormat = "2006-01-02 15:04:05.000"
+
+	fmt.Println(c)
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
