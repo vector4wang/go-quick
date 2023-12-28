@@ -3,16 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/rest"
 	"go-zero-demo/greet/internal/config"
 	"go-zero-demo/greet/internal/handler"
 	"go-zero-demo/greet/internal/svc"
-
-	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = "etc/greet-api.yaml"
+var configFile = "/Users/wangxc/Code/Github/go-quick/02-GoZero/go-zero-demo/greet/etc/greet-api.yaml"
 
 //var configFile = flag.String("f", "./etc/greet-api.yaml", "the config file")
 
@@ -21,6 +19,8 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(configFile, &c)
+	c.Log.Encoding = "plain"
+	c.Log.TimeFormat = "2006-01-02 15:04:05.000"
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
