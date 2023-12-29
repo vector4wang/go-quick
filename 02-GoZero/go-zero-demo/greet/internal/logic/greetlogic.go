@@ -24,8 +24,13 @@ func NewGreetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GreetLogic 
 }
 
 func (l *GreetLogic) Greet(req *types.Request) (resp *types.Response, err error) {
-	// todo: add your logic here and delete this line
+	err = l.svcCtx.CacheConn.SetCacheCtx(l.ctx, "key", req.Name)
+	if err != nil {
+		return &types.Response{
+			Message: err.Error(),
+		}, nil
 
+	}
 	return &types.Response{
 		Message: "Hello go-zero",
 	}, nil
