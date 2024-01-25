@@ -1,11 +1,12 @@
 package handler
 
 import (
+	"bufio"
 	"core/internal/svc"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/stringx"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -29,18 +30,33 @@ func CoreSseHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		if !ok {
 			log.Panic("server not support") //浏览器不兼容
 		}
-		for i := 0; i < 10; i++ {
 
-			_, err := fmt.Fprintf(w, "data: %s\n\n", stringx.Randn(10))
+		req, _ := http.NewRequest("GET", "http://localhost:8080/events", nil)
+		req.Header.Set("Accept", "text/event-stream")
+		client := &http.Client{}
+		res, _ := client.Do(req)
+		defer res.Body.Close()
+
+		reader := bufio.NewReader(res.Body)
+
+		for {
+			line, _ := reader.ReadString('\n')
+			if line == "\n" || line == "\r\n" {
+				continue
+			}
+
+			fields := strings.SplitN(line, ":", 2)
+			if len(fields) < 2 {
+				continue
+			}
+			_, err := fmt.Fprintf(w, "data: %s\n", fields[1])
 			w.(http.Flusher).Flush()
 			time.Sleep(2 * time.Second)
 			if err != nil {
 				return
 			}
+
 		}
-		//_, err := fmt.Fprintf(w, "data: %s\n\n", "dsdf")
-		//if err != nil {
-		//	return
-		//}
+
 	}
 }
