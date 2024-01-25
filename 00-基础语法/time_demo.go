@@ -27,4 +27,11 @@ func main() {
 		return
 	}
 	fmt.Println(t3) // 0000-01-01 13:00:00 +0000 UTC
+
+	t1 = time.Now()
+	fmt.Println(t1)
+	time.Sleep(time.Duration(2) * time.Second)
+	t2 = time.Now()
+	fmt.Println(t2.Sub(t1))
+
 }
