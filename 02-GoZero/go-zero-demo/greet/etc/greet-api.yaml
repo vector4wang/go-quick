@@ -9,4 +9,13 @@ CacheRedis:
   - Host: 127.0.0.1:6379
     Type: node
     Pass: "123456"
-    
+
+KqConsumerConf:
+  Name: kqConsumer
+  Brokers:
+    - 127.0.1:9092
+  Group: kqConsumer
+  Topic: test
+  Offset: first
+  Consumers: 8
+  Processors: 8

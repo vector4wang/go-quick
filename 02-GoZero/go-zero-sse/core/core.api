@@ -1,0 +1,17 @@
+syntax = "v1"
+
+type Request {
+	Name string `json:"name"`
+}
+
+type Response {
+	Name string `json:"name"`
+}
+
+service core-api {
+	@handler CoreHandler
+	post /from returns  (Response)
+
+	@handler CoreSseHandler
+	post /sse returns (Response)
+}

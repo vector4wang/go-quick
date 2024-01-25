@@ -7,6 +7,7 @@ import (
 	"gin-sample/controller/v1"
 	v2 "gin-sample/controller/v2"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"time"
 )
@@ -16,6 +17,8 @@ func InitRouter(r *gin.Engine) {
 	r.GET("/extHello", hello)
 
 	r.POST("/log/send", saveLog)
+
+	r.POST("/sse", sendMsg)
 
 	GroupV1 := r.Group("/v1")
 	{
@@ -33,6 +36,26 @@ func InitRouter(r *gin.Engine) {
 		GroupV2.Any("/say", v2.Say)
 	}
 
+}
+
+func sendMsg(context *gin.Context) {
+	w := context.Writer
+
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	_, ok := w.(http.Flusher)
+
+	if !ok {
+		log.Panic("server not support") //浏览器不兼容
+	}
+
+	_, err := fmt.Fprintf(w, "data: %s\n\n", "dsdf")
+	if err != nil {
+		return
+	}
 }
 
 func saveLog(context *gin.Context) {
