@@ -8,10 +8,14 @@ type Response {
 	Name string `json:"name"`
 }
 
+type SSERequest {
+	Text string `json:"text"`
+}
+
 service core-api {
 	@handler CoreHandler
 	post /from returns  (Response)
 
 	@handler CoreSseHandler
-	post /sse returns (Response)
+	post /sse (SSERequest) returns (string)
 }

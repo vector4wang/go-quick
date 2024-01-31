@@ -8,3 +8,7 @@ type Request struct {
 type Response struct {
 	Name string `json:"name"`
 }
+
+type SSERequest struct {
+	Text string `json:"text"`
+}

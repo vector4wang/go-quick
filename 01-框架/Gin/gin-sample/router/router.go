@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func InitRouter(r *gin.Engine) {
 
 	r.POST("/log/send", saveLog)
 
-	r.POST("/sse", sendMsg)
+	r.POST("/sse", sendMsg) // 输入字符串，按,隔开sse输出
 
 	GroupV1 := r.Group("/v1")
 	{
@@ -52,10 +53,21 @@ func sendMsg(context *gin.Context) {
 		log.Panic("server not support") //浏览器不兼容
 	}
 
-	_, err := fmt.Fprintf(w, "data: %s\n\n", "dsdf")
-	if err != nil {
-		return
+	jm := make(map[string]string) //注意该结构接受的内容
+	context.BindJSON(&jm)
+	//js, err := json.Marshal(jm)
+	//js["text"]
+	fmt.Println(jm)
+	txt := jm["text"]
+
+	for _, v := range strings.Split(txt, ",") {
+		fmt.Fprintf(w, "data: %s\n\n", v)
+		_, ok := w.(http.Flusher)
+		if !ok {
+			return
+		}
 	}
+
 }
 
 func saveLog(context *gin.Context) {
