@@ -45,7 +45,7 @@ func working(u usber) {
 	u.stop()
 }
 
-// 必须同时指定接口生命文件
+// PlayAuto 必须同时指定接口生命文件
 func PlayAuto(a Audio) {
 	a.FrontPlay()
 	a.BackPlay()

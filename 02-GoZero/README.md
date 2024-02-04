@@ -5,7 +5,7 @@
 
 3、生成代码
 ```
-goctl api new core --dir .
+goctl api go --api core.api --dir .
 ```
 
 4、go依赖初始化

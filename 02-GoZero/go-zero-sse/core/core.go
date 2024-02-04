@@ -1,13 +1,11 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"github.com/zeromicro/go-zero/core/logx"
-
 	"core/internal/config"
 	"core/internal/handler"
 	"core/internal/svc"
+	"flag"
+	"fmt"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -19,8 +17,9 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
+
 	conf.MustLoad(*configFile, &c)
-	logx.MustSetup(c.LogConf)
+	//logx.MustSetup(c.LogConf)
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
